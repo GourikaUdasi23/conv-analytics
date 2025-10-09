@@ -4,6 +4,7 @@ import { Firestore, addDoc, collection, collectionData, doc, serverTimestamp, se
 import { BehaviorSubject } from 'rxjs';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { getAuth, signInAnonymously } from 'firebase/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ import { environment } from '../../environments/environment';
 export class ChatService {
   private readonly firestore = inject(Firestore);
   private readonly http = inject(HttpClient);
+  private authInitialized = false;
   // Expose the currently selected conversation id so other components (Dashboard) can react
   public readonly currentConversationId = new BehaviorSubject<string | null>(null);
 
@@ -34,6 +36,19 @@ export class ChatService {
     return id;
   }
 
+  private async ensureAuth(): Promise<void> {
+    if (this.authInitialized) return;
+    try {
+      const auth = getAuth();
+      if (!auth.currentUser) {
+        await signInAnonymously(auth);
+      }
+      this.authInitialized = true;
+    } catch (e) {
+      console.warn('Anonymous auth not available or failed', e);
+    }
+  }
+
   setCurrentConversation(id: string | null): void {
     try { if (id) localStorage.setItem('lastConversationId', id); else localStorage.removeItem('lastConversationId'); } catch (e) {}
     this.currentConversationId.next(id);
@@ -52,9 +67,18 @@ export class ChatService {
 
     let botText = '';
     try {
-      const resp = await this.http.post<{ text: string }>(`${environment.apiBase}/api/chat`, { message: text }).toPromise();
+      await this.ensureAuth();
+      // attach id token for server verification (if available)
+      const auth = getAuth();
+      let headers: any = { 'Content-Type': 'application/json' };
+      if (auth && auth.currentUser) {
+        const token = await auth.currentUser.getIdToken();
+        headers.Authorization = `Bearer ${token}`;
+      }
+      const resp = await this.http.post<any>(`${environment.apiBase}/chat`, { message: text }, { headers }).toPromise();
       botText = resp?.text || '';
     } catch (e) {
+      console.error('Chat send error', e);
       botText = 'Error: Could not reach the AI service. Is the backend running?';
     }
 
