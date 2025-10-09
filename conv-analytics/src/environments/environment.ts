@@ -11,7 +11,8 @@ export const environment = {
   },
   // Gemini API key is read from runtime (e.g., environment variable or server)
   geminiApiKey: '',
-  apiBase: 'http://localhost:3000'
+  // Use relative /api so production calls the deployed serverless function on the same origin (Vercel rewrites)
+  apiBase: '/api'
 };
 
 
