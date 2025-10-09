@@ -7,7 +7,7 @@ module.exports = async function (req, res) {
   try {
     if (req.method !== 'POST') {
       res.setHeader('Allow', 'POST');
-      return res.status(405).json({ error: 'Method not allowed' });
+      return res.status(401).json({ error: 'Method not allowed' });
     }
 
     const { message } = req.body || {};
