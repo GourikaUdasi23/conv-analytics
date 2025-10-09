@@ -4,10 +4,20 @@
 // otherwise it returns a safe dev fallback echo reply.
 
 module.exports = async function (req, res) {
+  // Basic CORS handling: respond to preflight and allow your origin(s)
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  // Handle preflight
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
+  }
+
   try {
     if (req.method !== 'POST') {
       res.setHeader('Allow', 'POST');
-      return res.status(401).json({ error: 'Method not allowed' });
+      return res.status(405).json({ error: 'Method not allowed' });
     }
 
     const { message } = req.body || {};
