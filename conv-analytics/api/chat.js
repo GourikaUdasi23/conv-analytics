@@ -79,8 +79,9 @@ module.exports = async function (req, res) {
       return res.json({ text });
     } catch (err) {
       console.error('Generative AI call failed', err && (err.stack || err.message || err));
-      // provide a small diagnostic to the response (keep it safe)
-      return res.status(500).json({ error: 'Failed to generate (see function logs for details)' });
+      // Fallback to a safe dev reply so chat remains functional while debugging.
+      const reply = `Dev bot (fallback): I heard "${message}". (AI service error; check function logs)`;
+      return res.json({ text: reply });
     }
   } catch (err) {
     console.error('Unhandled function error', err && (err.stack || err.message || err));
