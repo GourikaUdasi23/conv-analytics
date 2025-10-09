@@ -5,12 +5,14 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --configuration production",
+    "vercel-build": "ng build --configuration production",
+    "build:vercel": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:host": "npx firebase-tools serve",
     "deploy": "ng build --configuration production && npx firebase-tools deploy --only hosting"
   },
-  "vercel-build": "ng build --configuration production",
+  
   "private": true,
   "dependencies": {
     "@angular/animations": "^18.2.0",
