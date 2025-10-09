@@ -3,7 +3,7 @@
 // If GEMINI_API_KEY is present it will attempt to use @google/generative-ai,
 // otherwise it returns a safe dev fallback echo reply.
 
-export default async function handler(req, res) {
+module.exports = async function (req, res) {
   try {
     if (req.method !== 'POST') {
       res.setHeader('Allow', 'POST');
@@ -24,19 +24,25 @@ export default async function handler(req, res) {
 
     // Dynamically import the GoogleGenerativeAI client only when the key exists.
     try {
-      const { GoogleGenerativeAI } = await import('@google/generative-ai');
+      // Use dynamic import to support ESM-only SDKs even from CommonJS
+  const mod = await import('@google/generative-ai');
+  const GoogleGenerativeAI = mod.GoogleGenerativeAI || (mod.default && mod.default.GoogleGenerativeAI) || mod.default || null;
+      if (!GoogleGenerativeAI) {
+        console.error('GoogleGenerativeAI export not found on module', Object.keys(mod || {}));
+        return res.status(500).json({ error: 'Generative AI client not available' });
+      }
       const genAI = new GoogleGenerativeAI(apiKey || '');
-      const model = genAI.getGenerativeModel({ model: 'gemini-2' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
       const result = await model.generateContent(message);
       const text = result.response.text();
       return res.json({ text });
     } catch (err) {
-      // If the Google client isn't available or fails, log and return an error
-      console.error('Generative AI call failed', err);
-      return res.status(500).json({ error: 'Failed to generate' });
+      console.error('Generative AI call failed', err && (err.stack || err.message || err));
+      // provide a small diagnostic to the response (keep it safe)
+      return res.status(500).json({ error: 'Failed to generate (see function logs for details)' });
     }
   } catch (err) {
-    console.error(err);
+    console.error('Unhandled function error', err && (err.stack || err.message || err));
     return res.status(500).json({ error: 'Server error' });
   }
-}
+};
