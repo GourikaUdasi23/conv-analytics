@@ -1,0 +1,157 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Theme variables (light defaults) */
+:root{
+  /* page */
+  --main-bg: #ffffff;
+  --page-gradient-start: rgba(250,250,255,0.6);
+  --page-gradient-end: rgba(245,247,250,0.95);
+
+  /* panes/cards */
+  --card-bg: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(245,247,250,0.9));
+  --card-text: #06132b;
+
+  /* nav */
+  --nav-bg: linear-gradient(90deg, rgba(255,255,255,0.6), rgba(250,250,255,0.4));
+  --nav-text: #062a4a;
+
+  /* bubbles */
+  --bubble-user-start: #4f46e5;
+  --bubble-user-end: #06b6d4;
+  --bubble-bot-start: #eef2ff;
+  --bubble-bot-end: #f0f9ff;
+  --bubble-user-text: #ffffff;
+  --bubble-bot-text: #042a4a;
+
+  --left-bg: #fafafa;
+  --accent-soft: rgba(30,136,229,0.08);
+  --muted: rgba(0,0,0,0.54);
+  --danger: #d32f2f;
+  --toolbar-icon-color: rgba(0,0,0,0.87);
+  --mat-card-shadow: 0 10px 30px rgba(11,20,34,0.06);
+  --stat-accent: #0b63d6;
+}
+
+html, body { height: 100%; }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
+body { margin: 0; font-family: Inter, Roboto, "Helvetica Neue", sans-serif; background: var(--main-bg); color: inherit; }
+
+.dark-theme {
+  --main-bg: #0b0f13;
+  --page-gradient-start: rgba(8,10,12,0.35);
+  --page-gradient-end: rgba(6,8,10,0.85);
+
+  --card-bg: linear-gradient(180deg, rgba(22,22,24,0.85), rgba(18,18,20,0.85));
+  --card-text: #e6eef8;
+
+  --nav-bg: linear-gradient(90deg, rgba(16,18,20,0.6), rgba(12,14,16,0.4));
+  --nav-text: #e6eef8;
+
+  --bubble-user-start: #0f172a;
+  --bubble-user-end: #0b1220;
+  --bubble-bot-start: #0b1220;
+  --bubble-bot-end: #08121a;
+  --bubble-user-text: #e6f0ff;
+  --bubble-bot-text: #dbeafe;
+
+  --left-bg: #0f1720;
+  --accent-soft: rgba(255,255,255,0.06);
+  --muted: rgba(255,255,255,0.65);
+  --danger: #ff6b6b;
+  --toolbar-icon-color: #e6eef8;
+  --mat-card-shadow: 0 12px 28px rgba(0,0,0,0.6);
+  --stat-accent: #60a5fa;
+  color: var(--card-text);
+}
+
+.container { max-width: 1100px; margin: 0 auto; padding: 16px; }
+.full { width: 100%; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; padding: 16px; }
+
+/* Small improvements for mat components */
+.mat-card { border-radius: 10px; }
+
+/* Utility */
+.muted { color: var(--muted); }
+
+/* Ensure toolbar buttons/icons are visible in both light and dark */
+.mat-toolbar button, .mat-toolbar .mat-icon-button, .mat-toolbar .mat-button {
+  color: var(--toolbar-icon-color);
+}
+
+.dark-theme .mat-toolbar button, .dark-theme .mat-toolbar .mat-icon-button, .dark-theme .mat-toolbar .mat-button {
+  color: var(--muted) !important;
+}
+
+/* Make mat-icon inherit color so the theme toggle icon matches text */
+.mat-icon { color: inherit; }
+
+/* Improve general card appearance */
+mat-card { box-shadow: var(--mat-card-shadow); background: var(--card-bg); color: var(--card-text); }
+
+/* App-level background and subtle container */
+body { -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+.app-shell { width: 100vw; height: 100vh; margin: 0; padding: 0; display: flex; flex-direction: column; }
+
+.app-main { flex: 1 1 auto; min-height: 0; overflow: hidden; }
+router-outlet, .app-main, app-root, body, html { height: 100%; }
+router-outlet > * { height: 100%; display: block; }
+
+/* Tighter card look for chat & dashboard */
+mat-card { border-radius: 12px; }
+
+/* Buttons and inputs slightly rounder */
+.mat-form-field-appearance-outline .mat-form-field-flex { border-radius: 8px; }
+
+/* Card headers and subtle background */
+mat-card-title { font-weight:700; font-size:16px; margin-bottom:8px; color: var(--card-text); }
+body::before { content: ''; position: fixed; inset: 0; z-index: -1; background: linear-gradient(180deg, var(--page-gradient-start), var(--page-gradient-end)); }
+
+/* Navbar */
+.app-nav { display:flex; align-items:center; gap:16px; padding: 8px 18px; border-radius: 12px; background: var(--nav-bg); box-shadow: var(--mat-card-shadow); }
+.app-nav .brand { font-weight:800; letter-spacing:0.4px; font-size:18px; color: var(--nav-text); }
+.app-nav a { color: var(--nav-text); text-decoration:none; padding:8px 12px; border-radius:8px; transition: all .18s ease; font-weight:600; }
+.app-nav a:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(8,12,20,0.06); }
+
+/* Chat luxury bubbles */
+.bubble {
+  border-radius: 20px;
+  padding: 12px 16px;
+  box-shadow: 0 8px 24px rgba(15,23,42,0.06);
+}
+.bubble.user { background: linear-gradient(135deg,var(--bubble-user-start),var(--bubble-user-end)); color: var(--bubble-user-text); }
+.bubble.bot { background: linear-gradient(135deg,var(--bubble-bot-start),var(--bubble-bot-end)); color: var(--bubble-bot-text); }
+
+/* Stat cards */
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+.stat-card { padding: 14px; border-radius: 12px; background: var(--card-bg); color: var(--card-text); transition: transform .18s ease, box-shadow .18s ease; box-shadow: 0 8px 18px rgba(8,12,20,0.04); }
+.stat-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(8,12,20,0.08); }
+.stat-value { font-size: 20px; font-weight:800; }
+.stat-label { font-size: 12px; opacity: .7; }
+
+/* Animations for chat messages */
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.msg-animate { animation: fadeInUp .36s cubic-bezier(.2,.9,.2,1); }
+
+.about-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(800px 400px at 10% 20%, rgba(99,102,241,0.08), transparent 18%), radial-gradient(600px 300px at 90% 80%, rgba(59,130,246,0.06), transparent 20%);
+  pointer-events: none;
+}
+
+/* subtle hero gradient / illustration for About page */
+.about-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(800px 400px at 10% 20%, rgba(99,102,241,0.08), transparent 18%), radial-gradient(600px 300px at 90% 80%, rgba(59,130,246,0.06), transparent 20%);
+  pointer-events: none;
+}
+
+.about-card { position: relative; overflow: hidden; }
+

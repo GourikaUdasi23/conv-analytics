@@ -1,0 +1,57 @@
+<div class="chat-layout">
+  <aside class="left-col">
+    <div class="left-header">
+      <button mat-stroked-button color="primary" class="full" (click)="newChat()">
+        <mat-icon>add</mat-icon>&nbsp;New Chat
+      </button>
+    </div>
+
+    <div class="convo-list">
+      <div *ngFor="let c of conversations(); let i = index" class="convo-item" [class.active]="c.id === conversationId">
+        <div class="avatar">{{ (c.title || '').charAt(0) || 'C' }}</div>
+        <div class="meta" (click)="selectChat(c.id)">
+          <div class="title">{{ c.title || ('Conversation ' + (i + 1)) }}</div>
+          <div class="preview">{{ (c.lastMessage || '').slice(0, 80) }}</div>
+        </div>
+        <div class="time">{{ c.updatedAt ? (c.updatedAt.seconds * 1000 | date:'shortTime') : '' }}</div>
+        <div class="actions">
+          <button mat-icon-button color="warn" aria-label="Delete" (click)="deleteConversation(c.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div *ngIf="conversations().length === 0" class="empty">
+        No conversations yet — start a new chat.
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-col">
+  <div class="messages" role="log" @listAnimation>
+      <div *ngFor="let m of messages()" [ngClass]="[m.role === 'user' ? 'bubble user' : 'bubble bot','msg-animate']">
+        <div class="bubble-row">
+          <div class="avatar-sm" *ngIf="m.role === 'bot'">B</div>
+          <div class="bubble-content">
+            <div class="text">{{ m.text }}</div>
+            <div class="meta">{{ m.role }} • {{ m.createdAt ? (m.createdAt.seconds * 1000 | date:'shortTime') : '' }}</div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="messages().length === 0" class="empty-main">
+        <h3>Welcome</h3>
+        <p>Select a conversation from the left or start a new one. Tips: try asking "Summarize my last 10 messages".</p>
+      </div>
+    </div>
+
+    <form (ngSubmit)="send()" class="composer">
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Type a message</mat-label>
+        <input matInput [(ngModel)]="input" name="message" />
+        <button mat-icon-button matSuffix color="primary" type="submit" [disabled]="isSending">
+          <mat-icon>send</mat-icon>
+        </button>
+      </mat-form-field>
+      <div *ngIf="error" class="error">{{ error }}</div>
+    </form>
+  </main>
+</div>

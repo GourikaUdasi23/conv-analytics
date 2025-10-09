@@ -1,0 +1,19 @@
+
+<div class="app-shell">
+  <div class="app-nav">
+  <a class="brand" routerLink="/" aria-label="Go to home">ConverseIQ AI Assistant</a>
+    <nav style="display:flex; gap:8px; align-items:center;">
+      <a routerLink="/chat" routerLinkActive="active">Chat</a>
+      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/about" routerLinkActive="active">About</a>
+    </nav>
+    <span style="flex:1 1 auto"></span>
+    <button mat-icon-button (click)="toggleDark()" aria-label="Toggle theme">
+      <mat-icon>{{ dark ? 'brightness_3' : 'wb_sunny' }}</mat-icon>
+    </button>
+  </div>
+
+  <main class="app-main">
+    <router-outlet></router-outlet>
+  </main>
+</div>

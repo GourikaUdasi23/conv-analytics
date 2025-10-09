@@ -1,0 +1,88 @@
+:host {
+	display: block;
+	height: 100%;
+	padding: 16px;
+	overflow: auto; /* allow the page to scroll when content exceeds viewport */
+}
+
+
+.grid { gap: 16px; display: grid; grid-template-columns: 1fr 360px; align-items:start; min-height: 100%; }
+:host { --gap: 18px; }
+
+mat-card { padding: 14px; }
+/* Force dashboard cards and their content to use theme variables (important to override material defaults) */
+.grid mat-card, .grid mat-card .mat-card-content, .grid mat-card .mat-card-title {
+	background: var(--card-bg) !important;
+	color: var(--card-text) !important;
+}
+
+.mat-card-content, mat-card-content { background: transparent !important; color: var(--card-text) !important; }
+
+.creative-empty {
+ 	border-radius: 10px;
+ 	padding: 20px;
+ 	background: linear-gradient(135deg, rgba(0,0,0,0.02), rgba(0,0,0,0.01));
+ 	color: var(--muted);
+ 	display:flex; align-items:center; justify-content:center; min-height:160px;
+ 	box-shadow: 0 8px 18px rgba(11,20,34,0.04);
+}
+
+.grid mat-card + mat-card { margin-top: 10px; }
+
+.grid .summary p { margin: 6px 0; }
+.summary { font-size: 14px; }
+
+.grid { column-gap: var(--gap); }
+
+.chart-wrap {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 8px 0 4px;
+	background: transparent;
+}
+
+/* Make the right column scrollable if it overflows vertically */
+.grid > div:nth-child(2), .grid > div:nth-child(3) {
+	max-height: calc(100vh - 140px);
+	overflow: auto;
+}
+
+.sidebar-keywords { margin-top: 12px; }
+.sidebar-keywords .mat-card-content { max-height: 220px; overflow: auto; padding-right: 8px; }
+.sidebar-keywords .keywords-wrap { display:flex; flex-wrap:wrap; gap:8px; }
+
+/* Make sure the chart canvas itself doesn't show a white background in dark mode */
+.chart-wrap canvas { background: transparent !important; }
+
+.chart-wrap canvas {
+	width: 100% !important;
+	max-width: 440px;
+	height: auto !important;
+	max-height: 260px;
+}
+
+.chart-legend { display:flex; gap:12px; align-items:center; margin-top:8px; }
+.chart-legend .legend-item { display:flex; gap:8px; align-items:center; font-size:13px; color:var(--muted); }
+.chart-legend .dot { width:12px; height:12px; border-radius:999px; display:inline-block; }
+.chart-legend .dot.user { background: var(--user-bubble); box-shadow: inset 0 0 0 4px var(--user-text); }
+.chart-legend .dot.bot { background: var(--bot-bubble); box-shadow: inset 0 0 0 4px var(--bot-text); }
+
+/* Re-use global stat-grid styles, add small variants here */
+.stat-grid { margin-bottom: 16px; }
+.stat-card { display:flex; flex-direction:column; gap:6px; align-items:flex-start; position:relative; overflow:hidden; }
+.stat-card::before { content: ''; position:absolute; left:0; top:0; bottom:0; width:6px; background: linear-gradient(180deg, var(--stat-accent), rgba(11,99,214,0.6)); }
+.stat-card { padding-left: 18px; }
+.stat-value { color: var(--stat-accent); font-size:22px; }
+.stat-label { font-size: 12px; opacity: .8; color: var(--muted); }
+
+.summary p { color: var(--card-text); margin:6px 0; }
+
+@media (max-width: 900px) {
+	.grid { grid-template-columns: 1fr; }
+}
+
+/* Keywords styling */
+.keywords-wrap { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.keywords-wrap mat-chip { margin: 4px 4px 0 0; }
+.no-keywords { padding: 8px 0; }

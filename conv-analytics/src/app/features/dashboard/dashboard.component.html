@@ -1,0 +1,87 @@
+<div class="grid">
+  <div style="grid-column: 1 / -1;">
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-label">User messages</div>
+        <div class="stat-value">{{ summary().userCount }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">User mood</div>
+        <div class="stat-value">
+          <span class="mood-emoji">{{ summary().userMoodEmoji || '😐' }}</span>
+          <span class="mood-label">{{ summary().userMoodLabel || 'neutral' }}</span>
+          <small class="mood-score">({{ (summary().userMoodScore || 0) * 100 | number:'1.0-0' }}%)</small>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Bot messages</div>
+        <div class="stat-value">{{ summary().botCount }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Avg response (ms)</div>
+        <div class="stat-value">{{ summary().averageResponseMs || '-' }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Sentiment</div>
+        <div class="stat-value">{{ (summary().sentimentScore * 100) | number:'1.0-0' }}%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Tokens (est.)</div>
+        <div class="stat-value">{{ summary().tokensUsed || 0 }}</div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <mat-card>
+      <mat-card-title>Conversation Summary</mat-card-title>
+      <mat-card-content>
+        <p><strong>User messages:</strong> {{ summary().userCount }}</p>
+        <p><strong>Bot messages:</strong> {{ summary().botCount }}</p>
+        <p><strong>Sentiment:</strong> {{ summary().sentimentScore | number:'1.2-2' }}</p>
+        <p *ngIf="summary().averageResponseMs"><strong>Avg response:</strong> {{ summary().averageResponseMs }} ms</p>
+        <p *ngIf="summary().tokensUsed !== undefined"><strong>Tokens (est.):</strong> {{ summary().tokensUsed }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-title>Message Distribution</mat-card-title>
+      <mat-card-content>
+        <div class="chart-wrap">
+          <canvas id="msgChart"></canvas>
+        </div>
+        <div class="chart-legend">
+          <div class="legend-item"><span class="dot user"></span> User messages</div>
+          <div class="legend-item"><span class="dot bot"></span> Bot messages</div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div>
+    <mat-card class="creative-empty">
+      <div>
+        <h3>Insights</h3>
+        <p>Want an overview? Try generating a summary or download the report.</p>
+      </div>
+    </mat-card>
+
+    <mat-card>
+      <button mat-raised-button color="primary" (click)="downloadPdf()">Download Report (PDF)</button>
+    </mat-card>
+
+    <!-- Keywords moved to sidebar for consistent layout -->
+    <mat-card class="sidebar-keywords">
+      <mat-card-title>Top Keywords</mat-card-title>
+      <mat-card-content>
+        <div class="keywords-wrap">
+          <mat-chip-set *ngIf="summary().topKeywords?.length; else noKeywords">
+            <mat-chip *ngFor="let k of summary().topKeywords" color="primary" selected>{{ k }}</mat-chip>
+          </mat-chip-set>
+          <ng-template #noKeywords>
+            <div class="no-keywords muted">No keywords detected yet.</div>
+          </ng-template>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
