@@ -48,7 +48,7 @@ body { margin: 0; font-family: Inter, Roboto, "Helvetica Neue", sans-serif; back
   --nav-bg: linear-gradient(90deg, rgba(16,18,20,0.6), rgba(12,14,16,0.4));
   --nav-text: #e6eef8;
 
-  --bubble-user-start: #0f172a;
+  --bubble-user-start: #08121a;
   --bubble-user-end: #0b1220;
   --bubble-bot-start: #0b1220;
   --bubble-bot-end: #08121a;
@@ -154,4 +154,42 @@ body::before { content: ''; position: fixed; inset: 0; z-index: -1; background: 
 }
 
 .about-card { position: relative; overflow: hidden; }
+
+/* Ensure composer input text is white in dark mode for readability. */
+.dark-theme .composer input.mat-input-element,
+.dark-theme .composer input.mat-input-element:focus,
+.dark-theme .composer .mat-form-field-infix input {
+  color: #ffffff !important;
+  caret-color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important; /* Safari/Chrome */
+}
+
+/* Also make sure placeholder remains legible (slightly muted white) */
+.dark-theme .composer input.mat-input-element::placeholder {
+  color: rgba(255,255,255,0.85) !important;
+  opacity: 1;
+}
+
+/* Strong global override for Material MDC inputs: ensure typed text is white in dark mode.
+   Targets various MDC/Material input class names seen in the DOM so the user-typed value
+   remains visible even when Material or the browser applies different colors. */
+.dark-theme input.mat-mdc-input-element,
+.dark-theme input.mdc-text-field__input,
+.dark-theme input.mat-mdc-input-element.mdc-text-field__input,
+.dark-theme .mat-mdc-form-field .mat-mdc-input-element,
+.dark-theme .mat-mdc-form-field.mat-focused .mat-mdc-input-element,
+.dark-theme input.mat-mdc-input-element:focus,
+.dark-theme input.mdc-text-field__input:focus,
+.dark-theme input.mat-mdc-form-field-input-control {
+  color: #ffffff !important;
+  caret-color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important; /* WebKit/Blink */
+}
+
+/* placeholder fallback */
+.dark-theme input.mat-mdc-input-element::placeholder,
+.dark-theme input.mdc-text-field__input::placeholder {
+  color: rgba(255,255,255,0.75) !important;
+  opacity: 1;
+}
 

@@ -108,6 +108,95 @@
 .composer { padding-top: 6px; }
 .error { color: var(--danger); margin-top: 6px; }
 
+/* Ensure the composer input is readable in both light and dark themes */
+.composer {
+  /* input text color should follow card/text variable for good contrast */
+  input.mat-input-element {
+    color: var(--card-text) !important;
+  }
+
+  /* placeholder should use muted variable for subtle contrast */
+  input.mat-input-element::placeholder {
+    color: var(--muted) !important;
+    opacity: 1;
+  }
+
+  /* mat-label (floating label) should be subtle but readable */
+  .mat-form-field-label {
+    color: var(--muted) !important;
+  }
+
+  /* ensure the send icon in the suffix is visible */
+  button.mat-icon-button.matSuffix .mat-icon {
+    color: var(--toolbar-icon-color) !important;
+  }
+}
+
+/* Stronger dark-theme overrides: ensure input text and placeholder are readable */
+.dark-theme .composer {
+  input.mat-input-element {
+    /* force pure white typed text in dark mode for maximum readability */
+    color: #ffffff !important;
+    caret-color: var(--card-text) !important;
+  }
+
+  /* slightly brighter placeholder in dark mode */
+  input.mat-input-element::placeholder {
+    color: rgba(230,238,248,0.8) !important; /* near --card-text but slightly muted */
+    opacity: 1;
+  }
+
+  /* floating label and outline should also be visible */
+  .mat-form-field-label {
+    color: rgba(230,238,248,0.9) !important;
+  }
+
+  .mat-form-field-appearance-outline .mat-form-field-outline {
+    border-color: rgba(230,238,248,0.06) !important;
+  }
+
+  button.mat-icon-button.matSuffix .mat-icon {
+    color: var(--card-text) !important;
+  }
+}
+
+/* Deeper overrides to ensure Material's internal selectors don't override our color
+   This targets the actual input element used by matInput and related wrappers. */
+:host ::ng-deep .mat-form-field .mat-input-element,
+:host ::ng-deep .mat-form-field .mat-form-field-infix input.mat-input-element,
+:host ::ng-deep input.mat-input-element {
+  color: var(--card-text) !important;
+  caret-color: var(--card-text) !important;
+}
+
+/* Specifically ensure dark-theme variant via a global class on body */
+.dark-theme :host ::ng-deep .mat-form-field .mat-input-element,
+.dark-theme :host ::ng-deep .mat-form-field .mat-form-field-infix input.mat-input-element {
+  color: #ffffff !important;
+  caret-color: #ffffff !important;
+}
+
+/* Make placeholder very readable in dark mode as a final fallback */
+:host ::ng-deep input.mat-input-element::placeholder {
+  color: rgba(230,238,248,0.9) !important;
+  opacity: 1;
+}
+
+/* FINAL dark mode fix for input text visibility */
+.dark-theme input.mat-input-element,
+.dark-theme .mat-form-field .mat-input-element,
+.dark-theme .mat-form-field .mat-form-field-infix input.mat-input-element {
+  color: #ffffff !important;        /* make user-typed text white */
+  caret-color: #ffffff !important;  /* make cursor white */
+}
+
+/* make placeholder text readable but slightly dimmer */
+.dark-theme input.mat-input-element::placeholder {
+  color: rgba(230, 238, 248, 0.8) !important;
+  opacity: 1;
+}
+
+
 @media (max-width: 820px) {
   .chat-layout { grid-template-columns: 1fr; }
   .left-col { order: 2; }
